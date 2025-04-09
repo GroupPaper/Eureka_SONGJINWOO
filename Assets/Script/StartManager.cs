@@ -1,26 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement; // 씬 전환을 위해 필요
 using UnityEngine.UI;              // UI(Button) 사용을 위해 필요
 
-// 시작 화면에서 사용되는 매니저 스크립트
 public class StartManager : MonoBehaviour
 {
-    public Button startButton; // 인스펙터에서 연결할 시작 버튼
+    public Button startButton;            // 시작 버튼 (인스펙터에서 연결)
+    public AudioClip bgmClip;             // 배경음악 (인스펙터에서 연결)
 
-    // 게임 시작 시 실행됨
+    private AudioSource audioSource;      // 재생용 오디오 소스
+
     void Start()
     {
-        // startButton이 클릭되면 LoadMainScene 함수가 실행되도록 이벤트 등록
-        startButton.onClick.AddListener(LoadMainScene);
+        audioSource = gameObject.AddComponent<AudioSource>(); // 오디오소스 컴포넌트 추가
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.clip = bgmClip;
+        audioSource.volume = 0.5f;
+        audioSource.Play(); // 배경음 재생
+
+        // 버튼 클릭 시 함수 호출 등록
+        startButton.onClick.AddListener(StartScene);
     }
 
-    // MainScene으로 씬을 전환하는 함수
-    void LoadMainScene()
+    // 버튼 클릭 시 호출될 함수
+    void StartScene()
     {
-        // 이름이 "MainScene"인 씬을 로드 (씬 이름은 정확히 일치해야 함)
+        // 씬 전환
         SceneManager.LoadScene("MainScene");
     }
 }
+
 

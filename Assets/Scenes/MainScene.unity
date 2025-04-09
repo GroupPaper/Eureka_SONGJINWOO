@@ -823,6 +823,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47f0f4e3c33d15542b41958c5c3a0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isReady: 0
   firstCard: {fileID: 0}
   secondCard: {fileID: 0}
   timeTxt: {fileID: 1966954772}

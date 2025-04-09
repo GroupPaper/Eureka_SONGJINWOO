@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// 오디오를 전역에서 관리하는 AudioManager 클래스
 public class AudioManager : MonoBehaviour
 {
     // 싱글톤 패턴: 어디서든 AudioManager.Instance로 접근 가능
@@ -15,7 +14,8 @@ public class AudioManager : MonoBehaviour
     public AudioClip clearBGM;      // 클리어 시 음악
 
     private AudioSource audioSource;    // 오디오를 재생하는 컴포넌트
-    private bool isUrgentPlaying = false; // 긴박 음악이 한 번만 재생되도록 체크
+    private AudioClip currentBGM; // 현재 재생 중인 BGM 추적
+
 
     // Awake는 씬이 로드될 때 가장 먼저 실행됨
     private void Awake()
@@ -42,28 +42,31 @@ public class AudioManager : MonoBehaviour
         audioSource.playOnAwake = false; // 자동 재생 X
         audioSource.volume = 0.5f;       // 기본 볼륨 설정
 
-        PlayNormalBGM(); // 처음에는 일반 배경음 재생
     }
 
     // 일반 배경음 재생 함수
     public void PlayNormalBGM()
     {
+        if (audioSource.clip == normalBGM && audioSource.isPlaying) return; // 중복 재생 방지
+
+        audioSource.Stop(); // 현재 음악 정지
         audioSource.loop = true;
         audioSource.clip = normalBGM;
         audioSource.Play();
+        currentBGM = normalBGM;
     }
+
 
     // 긴박한 상황용 배경음 재생 함수 (한 번만 재생되도록 체크)
     public void PlayUrgentBGM()
     {
-        if (urgentBGM != null && !isUrgentPlaying)
-        {
-            audioSource.Stop(); // 현재 음악 정지
-            audioSource.loop = true;
-            audioSource.clip = urgentBGM;
-            audioSource.Play();
-            isUrgentPlaying = true;
-        }
+        if (audioSource.clip == urgentBGM && audioSource.isPlaying) return;
+
+        audioSource.Stop();
+        audioSource.loop = true;
+        audioSource.clip = urgentBGM;
+        audioSource.Play();
+        currentBGM = urgentBGM;
     }
 
     // 게임 오버 사운드 재생 함수

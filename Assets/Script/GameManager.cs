@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public bool isReady = false; // 게임 시작 여부
+
     // 싱글톤 인스턴스 (다른 스크립트에서 쉽게 접근 가능하게 함)
     public static GameManager Instance;
 
@@ -42,8 +44,30 @@ public class GameManager : MonoBehaviour
         restartButton.onClick.AddListener(RestartGame);
     }
 
+    public void CheckAndPlayBackgroundMusic()
+    {
+        if (time <= 20f)
+        {
+            if (!isUrgentMusicPlayed)
+            {
+                AudioManager.Instance.PlayUrgentBGM();
+                timeTxt.color = Color.red;
+                isUrgentMusicPlayed = true;
+            }
+        }
+        else
+        {
+            AudioManager.Instance.PlayNormalBGM(); // 정상 BGM으로 설정
+            timeTxt.color = Color.white;
+            isUrgentMusicPlayed = false;
+        }
+    }
+
+
     void Update()
     {
+        if (!isReady) return; // 카드 배치 전에는 실행 안 됨
+
         // 시간이 남아있는 동안만 타이머 작동
         if (time > 0)
         {

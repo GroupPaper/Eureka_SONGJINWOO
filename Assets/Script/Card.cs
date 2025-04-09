@@ -21,8 +21,6 @@ public class Card : MonoBehaviour
 
     private AudioSource audioSource; // 사운드 재생용 AudioSource
 
-    private Vector3 originalScale;
-
     void Awake()
     {
         // AudioSource가 없다면 자동으로 추가
@@ -32,8 +30,6 @@ public class Card : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.playOnAwake = false; // 시작 시 자동 재생 금지
         }
-
-        originalScale = transform.localScale;
     }
 
     // 카드가 클릭되어 열릴 때 호출
@@ -94,9 +90,6 @@ public class Card : MonoBehaviour
         anim.SetBool("isOpen", false);
         front.SetActive(false);
         back.SetActive(true);
-
-        // 여기에서 크기를 원래대로
-        transform.localScale = originalScale;
     }
 
     // 카드 번호 및 앞면 이미지 설정
